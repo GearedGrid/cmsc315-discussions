@@ -35,7 +35,10 @@ class Person:
 
     # Method that returns information about the object
     def display_info(self):
-        return "Name: " + str(self.name) + ", Age: " + str(self.age)
+        # Build the string
+        info = "Name: " + str(self.name) + ", Age: " + str(self.age)
+        print(info)
+        return info
 
 
 # TODO 2:
@@ -52,7 +55,7 @@ class Person:
 
 class Student(Person):
     # New class variable
-    school = "University"
+    school_name = "Generic University"
 
     def __init__(self, name, age, student_id, courses=None):
         # Call parent constructor
@@ -63,13 +66,20 @@ class Student(Person):
         self.courses = courses.copy() if courses else []
 
     # New method
-    def add_course(self, course):
+    def enroll_course(self, course):
         self.courses.append(course)
 
     # Override parent method
     def display_info(self):
-        base = super().display_info()
-        return base + ", ID: " + str(self.student_id)
+        # Format courses without quotes
+        if self.courses:
+            courses_str = "[" + ", ".join(self.courses) + "]"
+        else:
+            courses_str = "[]"
+        # Build the full string
+        full = "Name: " + str(self.name) + ", Age: " + str(self.age) + ", ID: " + str(self.student_id) + ", School: " + str(self.school_name) + ", Courses: " + courses_str
+        print(full)
+        return full
 
 
 # TODO 3:
@@ -91,10 +101,10 @@ def demonstrate_namespaces():
     student2 = Student("Bob", 22, "S002", ["History"])
 
     # Access class variable through class itself
-    print("Class variable via class (Student.school):", Student.school)
+    print("Class variable via class (Student.school_name):", Student.school_name)
 
     # Access class variable through an object
-    print("Class variable via object (student1.school):", student1.school)
+    print("Class variable via object (student1.school_name):", student1.school_name)
 
     # Add a new attribute to only one object after creation
     student1.graduation_year = 2026
@@ -106,7 +116,7 @@ def demonstrate_namespaces():
     # Display information about the class namespace
     print("\nClass namespace (Student.__dict__ keys):", list(Student.__dict__.keys()))
     # Specifically show class variables
-    print("Class variables:", Student.species, Student.school)
+    print("Class variables:", Student.species, Student.school_name)
 
 
 # TODO 4:
@@ -168,14 +178,21 @@ def main():
     print("=== Unit 1 OOP Assignment ===")
 
     print("\nCreating and testing Person object")
-    person = Person("John", 22)
-    print("Person info:", person.display_info())
+    p = Person("John", 22)
+    p.display_info()   # prints directly, no print() needed
 
     print("\nCreating and testing Student object")
-    student = Student("Alice", 30, "S123", ["CS101", "MATH202"])
-    print("Student info:", student.display_info())
-    student.add_course("PHY101")
-    print("Student courses after adding:", student.courses)
+    s = Student('Dana', 22, 'S9876')
+    s.enroll_course('Biology')
+    s.enroll_course('Chemistry')
+    s.display_info()   # prints directly
+
+    print("\nChanging the class variable")
+    Student.school_name = 'University of Maryland Global Campus'
+    s2 = Student('Alice', 30, 'S123')
+    s.display_info()
+    s2.enroll_course("PHY101")
+    s2.display_info()
 
     # Call demonstration functions
     demonstrate_namespaces()
