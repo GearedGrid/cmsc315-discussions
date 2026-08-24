@@ -16,102 +16,152 @@ from collections import deque
 
 class Stack:
     def __init__(self):
-        # TODO (Student): Create the internal data structure for the stack.
-        # Hint: A Python list can be used to store stack values.
-        pass
+        # Internal storage: a Python list. The end of the list represents the top of the stack.
+        self.items = []
 
     def push(self, value):
-        # TODO (Student): Add value to the stack.
-        # Add a short comment explaining why this operation supports LIFO behavior.
-        pass
+        # Add value to the top (end) of the list.
+        # LIFO: the last element appended will be the first one removed.
+        self.items.append(value)
 
     def pop(self):
-        # TODO (Student): Remove and return the most recently added value.
-        # Improve or explain empty-stack handling.
-        # What should happen if the stack is empty?
-        pass
+        # Remove and return the top (last) element.
+        # If the stack is empty, raise an IndexError with a clear message.
+        if self.is_empty():
+            raise IndexError("pop from empty stack")
+        return self.items.pop()
 
     def peek(self):
-        # TODO (Student): Return the top value without removing it.
-        # Add a comment explaining what peek does.
-        pass
+        # Return the top value without removing it.
+        # Useful for inspecting the most recent item without altering the stack.
+        if self.is_empty():
+            raise IndexError("peek from empty stack")
+        return self.items[-1]
 
     def is_empty(self):
-        # TODO (Student): Return True if the stack has no values.
-        pass
+        # Return True if the stack contains no elements.
+        return len(self.items) == 0
 
 
 class Queue:
     def __init__(self):
-        # TODO (Student): Create the internal data structure for the queue.
-        # Hint: collections.deque is useful for efficient queue operations.
-        pass
+        # Use deque from collections for efficient O(1) appends and poplefts.
+        self.items = deque()
 
     def enqueue(self, value):
-        # TODO (Student): Add value to the back of the queue.
-        # Add a short comment explaining why this operation supports FIFO behavior.
-        pass
+        # Add value to the back (right end) of the deque.
+        # FIFO: the first element added will be the first one removed.
+        self.items.append(value)
 
     def dequeue(self):
-        # TODO (Student): Remove and return the value from the front of the queue.
-        # Explain or improve empty-queue handling.
-        pass
+        # Remove and return the front (leftmost) element.
+        # If the queue is empty, raise an IndexError with a clear message.
+        if self.is_empty():
+            raise IndexError("dequeue from empty queue")
+        return self.items.popleft()
 
     def front(self):
-        # TODO (Student): Return the front value without removing it.
-        # Add a comment explaining what front returns.
-        pass
+        # Return the front value without removing it.
+        # Useful for examining the next element to be dequeued.
+        if self.is_empty():
+            raise IndexError("front from empty queue")
+        return self.items[0]
 
     def is_empty(self):
-        # TODO (Student): Return True if the queue has no values.
-        pass
+        # Return True if the queue contains no elements.
+        return len(self.items) == 0
 
 
 def main():
-    print("=== UNIT 2: STACKS AND QUEUES ===")
+    print("=== UNIT 2: STACKS AND QUEUES ===\n")
 
     # ===============================
-    # TODO (Student): STACK DEMO
+    # STACK DEMO
     # ===============================
-    # Requirements:
-    # 1. Create a Stack object.
-    # 2. Add at least 4 values to the stack.
-    # 3. Improve the print statements so they clearly explain what is happening.
-    # 4. Demonstrate LIFO behavior.
-    # 5. Show what happens when pop() is used on an empty stack.
-    #
-    # Edge Cases:
-    # 6. Show what happens when peek() is used on an empty stack.
-    # 7. Create a stack with only one item, remove it,
-    #    and verify the stack is empty afterward.
+    print("--- STACK DEMO (LIFO) ---")
+    stack = Stack()
 
+    # 1. Add at least 4 values.
+    print("Pushing values: 10, 20, 30, 40")
+    stack.push(10)
+    stack.push(20)
+    stack.push(30)
+    stack.push(40)
 
-print("\n=== STACK DEMO ===")
-print("TODO: Create a Stack object, demonstrate LIFO behavior,")
-print("      test popping from an empty stack,")
-print("      test peeking at an empty stack,")
-print("      and verify a single-item stack becomes empty after removal.")
+    # 2. Demonstrate LIFO behavior.
+    print("Stack contents (top to bottom):", stack.items[::-1])  # show top first
+    print("Peek at top:", stack.peek())
+    print("Pop once:", stack.pop())
+    print("Pop again:", stack.pop())
+    print("After two pops, stack (top to bottom):", stack.items[::-1])
 
-# ===============================
-# TODO (Student): QUEUE DEMO
-# ===============================
-# Requirements:
-# 1. Create a Queue object.
-# 2. Add at least 4 values to the queue.
-# 3. Improve the print statements so they clearly explain what is happening.
-# 4. Demonstrate FIFO behavior.
-# 5. Show what happens when dequeue() is used on an empty queue.
-#
-# Edge Cases:
-# 6. Show what happens when front() is used on an empty queue.
-# 7. Create a queue with only one item, remove it,
-#    and verify the queue is empty afterward.
+    # 3. Show what happens when pop() is used on an empty stack.
+    print("\nTesting empty-stack pop:")
+    # Empty the stack completely.
+    while not stack.is_empty():
+        stack.pop()
+    try:
+        stack.pop()
+    except IndexError as e:
+        print("Caught expected error:", e)
 
-print("\n=== QUEUE DEMO ===")
-print("TODO: Create a Queue object, demonstrate FIFO behavior,")
-print("      test dequeuing from an empty queue,")
-print("      test viewing the front of an empty queue,")
-print("      and verify a single-item queue becomes empty after removal.")
+    # 4. Test peek() on an empty stack.
+    print("\nTesting empty-stack peek:")
+    try:
+        stack.peek()
+    except IndexError as e:
+        print("Caught expected error:", e)
+
+    # 5. Single-item stack: add one, remove it, verify empty.
+    print("\nSingle-item stack test:")
+    stack.push(99)
+    print("Stack after pushing 99 (top to bottom):", stack.items[::-1])
+    removed = stack.pop()
+    print(f"Popped: {removed}, stack is empty? {stack.is_empty()}")
+
+    # ===============================
+    # QUEUE DEMO
+    # ===============================
+    print("\n--- QUEUE DEMO (FIFO) ---")
+    queue = Queue()
+
+    # 1. Add at least 4 values.
+    print("Enqueuing values: 'A', 'B', 'C', 'D'")
+    queue.enqueue('A')
+    queue.enqueue('B')
+    queue.enqueue('C')
+    queue.enqueue('D')
+
+    # 2. Demonstrate FIFO behavior.
+    print("Queue contents (front to back):", list(queue.items))
+    print("Front element:", queue.front())
+    print("Dequeue once:", queue.dequeue())
+    print("Dequeue once:", queue.dequeue())
+    print("After two dequeues, queue (front to back):", list(queue.items))
+
+    # 3. Show what happens when dequeue() is used on an empty queue.
+    print("\nTesting empty-queue dequeue:")
+    while not queue.is_empty():
+        queue.dequeue()
+    try:
+        queue.dequeue()
+    except IndexError as e:
+        print("Caught expected error:", e)
+
+    # 4. Test front() on an empty queue.
+    print("\nTesting empty-queue front:")
+    try:
+        queue.front()
+    except IndexError as e:
+        print("Caught expected error:", e)
+
+    # 5. Single-item queue: add one, remove it, verify empty.
+    print("\nSingle-item queue test:")
+    queue.enqueue('Z')
+    print("Queue after enqueuing 'Z' (front to back):", list(queue.items))
+    removed = queue.dequeue()
+    print(f"Dequeued: {removed}, queue is empty? {queue.is_empty()}")
+
 
 if __name__ == "__main__":
     main()
