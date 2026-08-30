@@ -19,8 +19,6 @@ This assignment examines insertion, deletion, and searching in Python lists.
 4. Demonstrate edge cases.
 5. Create a real-world scenario.
 
----
-
 ## Discussion Board Reflection
 
 After completing the programming assignment, I added this reflection to my initial discussion post in LEO.
