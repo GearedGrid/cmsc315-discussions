@@ -17,14 +17,16 @@ class Node:
         # TODO (Student):
         # Store the node's value and initialize references
         # to the left and right child nodes.
-        pass
+        self.value = value
+        self.left = None
+        self.right = None
 
 
 class BST:
     def __init__(self):
         # TODO (Student):
         # Initialize an empty Binary Search Tree.
-        pass
+        self.root = None
 
     def insert(self, value):
         """
@@ -37,7 +39,12 @@ class BST:
           whether a value is smaller or larger than the
           current node.
         """
-        pass
+        # If the tree is empty, the new value becomes the root.
+        if self.root is None:
+            self.root = Node(value)
+        else:
+            # Otherwise, recursively find the correct position.
+            self._insert_recursive(self.root, value)
 
     def _insert_recursive(self, node, value):
         """
@@ -50,7 +57,24 @@ class BST:
         - Insert larger values into the right subtree.
         - Return the updated node reference.
         """
-        pass
+        if value < node.value:
+            # If the left child is empty, insert here.
+            if node.left is None:
+                node.left = Node(value)
+            else:
+                # Otherwise, continue down the left subtree.
+                self._insert_recursive(node.left, value)
+        elif value > node.value:
+            # If the right child is empty, insert here.
+            if node.right is None:
+                node.right = Node(value)
+            else:
+                # Otherwise, continue down the right subtree.
+                self._insert_recursive(node.right, value)
+        else:
+            # Duplicate value = we ignore it.
+            # Alternatively, we could store counts or allow duplicates in one subtree.
+            pass
 
     def search(self, value):
         """
@@ -63,14 +87,21 @@ class BST:
         - Add comments explaining why BST search is often
           more efficient than linear search.
         """
-        pass
+        return self._search_recursive(self.root, value)
 
     def _search_recursive(self, node, value):
         """
         TODO (Student):
         Implement recursive BST search.
         """
-        pass
+        if node is None:
+            return False
+        if value == node.value:
+            return True
+        elif value < node.value:
+            return self._search_recursive(node.left, value)
+        else:
+            return self._search_recursive(node.right, value)
 
     def inorder(self):
         """
@@ -78,7 +109,9 @@ class BST:
         Return a list containing the values from an
         in-order traversal.
         """
-        pass
+        values = []
+        self._inorder_recursive(self.root, values)
+        return values
 
     def _inorder_recursive(self, node, values):
         """
@@ -92,8 +125,13 @@ class BST:
         - Add comments explaining why this traversal
           produces sorted output in a BST.
         """
-        pass
-
+        if node is not None:
+            # 1. Visit left subtree
+            self._inorder_recursive(node.left, values)
+            # 2. Visit current node
+            values.append(node.value)
+            # 3. Visit right subtree
+            self._inorder_recursive(node.right, values)
 
 def main():
     print("=== UNIT 4: BINARY SEARCH TREES ===")
@@ -111,7 +149,15 @@ def main():
     # 5. Use comments to explain why a BST is efficient at reducing search space for each step.
 
     print("\n=== TREE CONSTRUCTION ===")
-    print("TODO: Create a BST and insert multiple values.")
+    bst = BST()
+    values_to_insert = [50, 30, 70, 20, 40, 60, 80]
+    print(f"Inserting values: {values_to_insert}")
+    for val in values_to_insert:
+        bst.insert(val)
+        # At each insertion, the tree compares the new value with nodes along
+        # the path, halving the candidate subtree each time. This is why
+        # insertion (and search) is O(log n) on average.
+    print("Tree constructed successfully.")
 
     # ===============================
     # TODO (Student): IN-ORDER TRAVERSAL
@@ -124,7 +170,11 @@ def main():
     #    sorted output in a BST.
 
     print("\n=== IN-ORDER TRAVERSAL ===")
-    print("TODO: Display and explain traversal results.")
+    sorted_values = bst.inorder()
+    print(f"In‑order traversal result: {sorted_values}")
+    # Explanation: In a BST, the left subtree always contains smaller values,
+    # and the right subtree larger ones. Visiting left → node → right would
+    # yield all values in non‑decreasing order.
 
     # ===============================
     # TODO (Student): SEARCH TESTS
@@ -136,7 +186,19 @@ def main():
     # 3. Use comments to clearly explain the results.
 
     print("\n=== SEARCH TESTS ===")
-    print("TODO: Demonstrate BST searching.")
+    # Existing values
+    search_vals = [40, 80]
+    for val in search_vals:
+        found = bst.search(val)
+        print(f"Search for {val}: {'Found' if found else 'Not found'}")
+    # Non‑existing values
+    search_vals_missing = [25, 100]
+    for val in search_vals_missing:
+        found = bst.search(val)
+        print(f"Search for {val}: {'Found' if found else 'Not found'}")
+    # Each search compares the target with the root, then moves left or right,
+    # discarding half of the remaining tree at each step, leading to O(log n)
+    # average performance.
 
     # ===============================
     # TODO (Student): EDGE CASES
@@ -153,9 +215,28 @@ def main():
     # Use comments to explain what happens and why.
 
     print("\n=== EDGE CASES ===")
-    print("TODO: Demonstrate and explain an edge case.")
 
+    # 1. Empty tree traversal and search
+    empty_bst = BST()
+    print("Empty tree in‑order traversal:", empty_bst.inorder())
+    print("Search in empty tree for 10:", empty_bst.search(10))
+    # Both operations handle the empty root and return empty list / False.
 
+    # 2. Duplicate insertion
+    duplicate_val = 30
+    bst.insert(duplicate_val)  # Should have no effect (duplicate ignored)
+    print(f"After inserting duplicate {duplicate_val}, in‑order still sorted: {bst.inorder()}")
+
+    # 3. Single‑node tree
+    single_bst = BST()
+    single_bst.insert(42)
+    print("Single‑node tree in‑order:", single_bst.inorder())
+    print("Search for 42 in single‑node:", single_bst.search(42))
+    print("Search for 99 in single‑node:", single_bst.search(99))
+    # The root is the only node, comparisons work as expected.
+
+    # Additional note: In a severely unbalanced tree (e.g., inserting sorted
+    # values), performance degrades to O(n).
 
 if __name__ == "__main__":
     main()
