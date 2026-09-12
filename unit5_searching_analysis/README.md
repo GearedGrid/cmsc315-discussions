@@ -29,3 +29,17 @@ Your reflection should be approximately 150–200 words and address the followin
 1. What concepts or skills did you learn while completing this assignment?
 2. What challenges did you encounter, and how did you overcome them?
 3. Explain when to use linear versus binary search, including tradeoffs in real-world scenarios.
+
+### Reflection
+
+1. What concepts or skills did you learn while completing this assignment?
+
+I learned how linear search and binary search work and why their time complexities are different. Linear search checks each item one by one, so it is O(n), while binary search cuts the list in half each time, so it is O(log n).
+
+2. What challenges did you encounter, and how did you overcome them?
+
+The hardest part was making sure binary search used the correct left and right bounds, especially with edge cases like empty lists or single-item lists. I fixed this by testing small examples and tracing the middle index. I also used timing code to compare the algorithms on a large list, which helped me see the difference in speed.
+
+3. Explain when to use linear versus binary search, including tradeoffs in real-world scenarios.
+
+In real life, linear search is useful for small or unsorted data because it is simple, but binary search is better for large sorted data like a library catalog or phone book. The main tradeoff is that binary search is faster but requires the data to be sorted first.
