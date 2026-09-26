@@ -28,7 +28,26 @@ def bubble_sort(lst):
     - Add meaningful comments.
 
     """
-    pass
+    sorted_lst = lst[:]
+    n = len(sorted_lst)
+
+    # Traverse through all elements in the list
+    for i in range(n):
+        swapped = False
+
+        # Last i elements are already in their correct sorted position
+        for j in range(0, n - i - 1):
+            # Compare adjacent elements
+            if sorted_lst[j] > sorted_lst[j + 1]:
+                # Swap if they are out of order
+                sorted_lst[j], sorted_lst[j + 1] = sorted_lst[j + 1], sorted_lst[j]
+                swapped = True
+
+        # If no swaps occurred, the list is already sorted
+        if not swapped:
+            break
+
+    return sorted_lst
 
 
 def merge_sort(lst):
@@ -45,7 +64,17 @@ def merge_sort(lst):
     - Add meaningful comments.
 
     """
-    pass
+    # Base case: a list with 0 or 1 element is already sorted
+    if len(lst) <= 1:
+        return lst[:]
+
+    # Find the middle point and divide the list into two halves
+    mid = len(lst) // 2
+    left_half = merge_sort(lst[:mid])
+    right_half = merge_sort(lst[mid:])
+
+    # Merge the two sorted halves together
+    return merge(left_half, right_half)
 
 
 def merge(left, right):
@@ -60,7 +89,27 @@ def merge(left, right):
     - Return the merged sorted list.
     - Add meaningful comments.
     """
-    pass
+    # Result list for the merged sorted values
+    result = []
+    i = 0
+    j = 0
+
+    # Compare values from left and right until one list is exhausted
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+
+    # Append any remaining values from the left list
+    result.extend(left[i:])
+
+    # Append any remaining values from the right list
+    result.extend(right[j:])
+
+    return result
 
 
 def main():
@@ -80,6 +129,13 @@ def main():
     print("\n=== DATASET #1 ===")
     print("TODO: Create an unsorted dataset and test both sorting algorithms.")
 
+    # Dataset #1: at least 7 unsorted values
+    dataset1 = [42, 17, 93, 8, 23, 55, 4, 71]
+
+    print("Original Dataset #1:", dataset1)
+    print("Bubble Sort Result:", bubble_sort(dataset1))
+    print("Merge Sort Result: ", merge_sort(dataset1))
+
     # ===============================
     # TODO (Student): DATASET #2
     # ===============================
@@ -92,6 +148,17 @@ def main():
 
     print("\n=== DATASET #2 ===")
     print("TODO: Create a second dataset and compare sorting results.")
+
+    # Dataset #2: different values, including duplicates and negative numbers
+    dataset2 = [30, -5, 12, 30, 7, 0, 19, -2]
+
+    bubble_result2 = bubble_sort(dataset2)
+    merge_result2 = merge_sort(dataset2)
+
+    print("Original Dataset #2:", dataset2)
+    print("Bubble Sort Result:", bubble_result2)
+    print("Merge Sort Result: ", merge_result2)
+    print("Comparison: Both algorithms produced the same sorted result:", bubble_result2 == merge_result2)
 
     # ===============================
     # TODO (Student): EDGE CASES
@@ -112,6 +179,21 @@ def main():
     print("TODO: Demonstrate and explain edge cases.")
 
 
+    # Edge Case 1: List with duplicate values
+    print("\n--- Edge Case 1: Duplicate Values ---")
+    duplicates = [4, 2, 4, 1, 2, 4]
+    print("Original:", duplicates)
+    print("Bubble Sort:", bubble_sort(duplicates))
+    print("Merge Sort: ", merge_sort(duplicates))
+    print("Explanation: Both algorithms keep duplicate values. The duplicates appear multiple times in the sorted output.")
+
+    # Edge Case 2: Single-element list
+    print("\n--- Edge Case 2: Single-Element List ---")
+    single_element = [99]
+    print("Original:", single_element)
+    print("Bubble Sort:", bubble_sort(single_element))
+    print("Merge Sort: ", merge_sort(single_element))
+    print("Explanation: A single-element list is already sorted, so both algorithms return it unchanged.")
 
 
 if __name__ == "__main__":
